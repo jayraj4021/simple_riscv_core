@@ -8,12 +8,6 @@ Output description =>
     1. fDataOut => 6 bit output data to visualize on 6 LEDs of tang nano 9k
 */
 
-`include "pc.v"
-`include "ir.v"
-`include "mdr.v"
-`include "ar.v"
-`include "br.v"
-`include "alur.v"
 `include "alu.v"
 `include "rf.v"
 `include "immGen.v"
@@ -48,21 +42,21 @@ module top( input clk, nrst, output [5:0] fDataOut);
 
    
     // instantiating all the modules
-    pc u_pc(.clk(clk), .rst(rst), .enable(pcWriteEnableNet),.addrIn(addrInPcNet), .addrOut(addrOutPcNet));
+    regWithEnable u_pc(.clk(clk), .rst(rst), .enable(pcWriteEnableNet), .regIn(addrInPcNet), .regOut(addrOutPcNet));
     mux2 u_IorDmux(.in0(addrOutPcNet), .in1(aluOutNet), .select(IorDSelectorNet), .out(IorDmuxOutNet));
     //Gowin_SP u_spmem(.dout(memoryDataOutNet), .clk(clk), .oce(oceNet), .ce(ceNet), .reset(rst), .wre(wreNet), .ad(IorDmuxOutNet[7:0]), .din(brOutNet));
     basicMemory u_basicMemory(.clk(clk), .rst(rst), .ce(ceNet), .wre(wreNet), .ad(IorDmuxOutNet[7:0]), .din(brOutNet), .dout(memoryDataOutNet));
-    ir u_ir(.clk(clk), .enable(irWriteEnableNet),.instIn(memoryDataOutNet), .instOut(irOutNet));
-    mdr u_mdr(.clk(clk), .mdrIn(memoryDataOutNet), .mdrOut(mdrOutNet));
-    mux2 u_rfWriteDataMux(.in0(aluOutNet),.in1(mdrOutNet),.select(memtoRegSelectNet),.out(rfWriteDataMuxOutNet));
+    regWithEnable u_ir(.clk(clk), .rst(rst), .enable(irWriteEnableNet), .regIn(memoryDataOutNet), .regOut(irOutNet));
+    regWithoutEnable u_mdr(.clk(clk), .rst(rst), .regIn(memoryDataOutNet), .regOut(mdrOutNet));
+    mux2 u_rfWriteDataMux(.in0(aluOutNet), .in1(mdrOutNet), .select(memtoRegSelectNet), .out(rfWriteDataMuxOutNet));
     rf u_rf(.clk(clk), .regWriteEnable(regWriteEnableNet), .readReg1(irOutNet[19:15]), .readReg2(irOutNet[24:20]), .writeReg(irOutNet[11:7]), .readData1(readData1Net), .readData2(readData2Net),.writeData(rfWriteDataMuxOutNet));
-    ar u_ar(.clk(clk), .aIn(readData1Net), .aOut(arOutNet));
+    regWithoutEnable u_ar(.clk(clk), .rst(rst), .regIn(readData1Net), .regOut(arOutNet));
     mux2 u_aluAmux(.in0(addrOutPcNet), .in1(arOutNet), .select(aluSrcASelectNet), .out(aluAmuxOutNet));
-    br u_br(.clk(clk), .bIn(readData2Net), .bOut(brOutNet));
+    regWithoutEnable u_br(.clk(clk), .rst(rst), .regIn(readData2Net), .regOut(brOutNet));
     mux3 u_aluBmux(.in0(brOutNet),.in1(32'h00000004),.in2(immGenOutNet),.select(aluSrcBSelectNet),.out(aluBmuxOutNet));
     immGen u_immGen(.instr(irOutNet),.imm(immGenOutNet));
     alu u_alu(.ALUop(aluOpNet), .instOpcode(irOutNet[6:0]), .A(aluAmuxOutNet), .B(aluBmuxOutNet), .Z(addrInPcNet));
-    alur u_alur(.clk(clk), .aluIn(addrInPcNet), .aluOut(aluOutNet));
+    regWithoutEnable u_alur(.clk(clk),  .rst(rst), .regIn(addrInPcNet), .regOut(aluOutNet));
     control u_control(.clk(clk), .rst(rst), .instOpcode(irOutNet[6:0]), .IorDSelector(IorDSelectorNet), .ce(ceNet), .oce(oceNet), .wre(wreNet), .pcWriteEnable(pcWriteEnableNet), .memtoRegSelect(memtoRegSelectNet),
                 .irWriteEnable(irWriteEnableNet), .regWriteEnable(regWriteEnableNet), .aluSrcASelect(aluSrcASelectNet), .aluSrcBSelect(aluSrcBSelectNet), .aluOp(aluOpNet));
 
@@ -86,6 +80,30 @@ module mux3 (input [31:0] in0, in1, in2, input [1:0] select, output reg [31:0] o
             2'b10: out = in2;
             default: out = in1;
         endcase
+    end
+endmodule
+
+module regWithEnable (input clk, input rst ,input enable, input [31:0] regIn, output reg [31:0] regOut);
+    always@(posedge clk) begin
+        if(rst == 1'b1) begin
+            regOut <= 32'h0000;
+        end
+        else begin
+            if(enable == 1'b1) begin
+                regOut <= regIn;
+            end
+        end
+    end
+endmodule
+
+module regWithoutEnable (input clk, input rst, input [31:0] regIn, output reg [31:0] regOut);
+    always@(posedge clk) begin
+        if(rst == 1'b1) begin
+            regOut <= 32'h0000;
+        end
+        else begin
+            regOut <= regIn;
+        end
     end
 endmodule
 

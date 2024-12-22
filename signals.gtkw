@@ -1,28 +1,26 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri Dec 06 02:45:50 2024
+[*] Sun Dec 22 17:03:30 2024
 [*]
-[dumpfile] "D:\jayraj\RISC_V\src\top_tb.vcd"
-[dumpfile_mtime] "Fri Dec 06 02:44:15 2024"
-[dumpfile_size] 20657
-[savefile] "D:\jayraj\RISC_V\src\signals.gtkw"
+[dumpfile] "D:\jayraj\RISC_V\simple_riscv_core\top_tb.vcd"
+[dumpfile_mtime] "Sun Dec 22 17:00:59 2024"
+[dumpfile_size] 33833
+[savefile] "D:\jayraj\RISC_V\simple_riscv_core\signals.gtkw"
 [timestart] 0
-[size] 1514 986
-[pos] -3331 -698
-*-6.000000 360 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 2560 1369
+[pos] -4083 -1083
+*-6.000000 140 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top_tb.
 [treeopen] top_tb.u_top.
 [sst_width] 201
 [signals_width] 174
 [sst_expanded] 1
-[sst_vpaned_height] 608
+[sst_vpaned_height] 891
 @28
 top_tb.clk
 top_tb.nrst
 @22
 top_tb.u_top.u_control.instOpcode[6:0]
-top_tb.u_top.u_control.currentState[9:0]
-top_tb.u_top.u_control.nextState[9:0]
 @28
 top_tb.u_top.u_control.IorDSelector
 top_tb.u_top.u_control.ce
@@ -32,40 +30,18 @@ top_tb.u_top.u_control.pcWriteEnable
 top_tb.u_top.u_control.memtoRegSelect
 top_tb.u_top.u_control.regWriteEnable
 top_tb.u_top.u_control.irWriteEnable
-@29
 top_tb.u_top.u_control.aluSrcASelect
-@28
 top_tb.u_top.u_control.aluSrcBSelect[1:0]
 top_tb.u_top.u_control.aluOp[1:0]
 @200
 -PC
-@22
-top_tb.u_top.u_pc.addrOut[31:0]
+@23
+top_tb.u_top.u_pc.regOut[31:0]
 @200
 -memory
 @22
 top_tb.u_top.u_basicMemory.ad[7:0]
 top_tb.u_top.u_basicMemory.dout[31:0]
-@200
--IR
-@22
-top_tb.u_top.u_ir.instOut[31:0]
-@200
--MDR
-@22
-top_tb.u_top.u_mdr.mdrOut[31:0]
-@200
--A
-@22
-top_tb.u_top.u_ar.aOut[31:0]
-@200
--B
-@22
-top_tb.u_top.u_br.bOut[31:0]
-@200
--ALUr
-@22
-top_tb.u_top.u_alur.aluOut[31:0]
 @200
 -immediate
 @22

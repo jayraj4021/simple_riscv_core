@@ -1,5 +1,5 @@
 $date
-	Sun Dec 08 12:01:47 2024
+	Sun Dec 22 22:35:11 2024
 $end
 $version
 	Icarus Verilog
@@ -69,14 +69,16 @@ $var wire 32 N in0 [31:0] $end
 $var reg 32 O out [31:0] $end
 $upscope $end
 $scope module u_alur $end
-$var wire 32 P aluIn [31:0] $end
 $var wire 1 " clk $end
-$var reg 32 Q aluOut [31:0] $end
+$var wire 32 P regIn [31:0] $end
+$var wire 1 % rst $end
+$var reg 32 Q regOut [31:0] $end
 $upscope $end
 $scope module u_ar $end
 $var wire 1 " clk $end
-$var wire 32 R aIn [31:0] $end
-$var reg 32 S aOut [31:0] $end
+$var wire 1 % rst $end
+$var wire 32 R regIn [31:0] $end
+$var reg 32 S regOut [31:0] $end
 $upscope $end
 $scope module u_basicMemory $end
 $var wire 8 T ad [7:0] $end
@@ -89,8 +91,9 @@ $var reg 32 V dout [31:0] $end
 $upscope $end
 $scope module u_br $end
 $var wire 1 " clk $end
-$var wire 32 W bIn [31:0] $end
-$var reg 32 X bOut [31:0] $end
+$var wire 1 % rst $end
+$var wire 32 W regIn [31:0] $end
+$var reg 32 X regOut [31:0] $end
 $upscope $end
 $scope module u_control $end
 $var wire 1 " clk $end
@@ -128,20 +131,22 @@ $upscope $end
 $scope module u_ir $end
 $var wire 1 " clk $end
 $var wire 1 / enable $end
-$var wire 32 k instIn [31:0] $end
-$var reg 32 l instOut [31:0] $end
+$var wire 32 k regIn [31:0] $end
+$var wire 1 % rst $end
+$var reg 32 l regOut [31:0] $end
 $upscope $end
 $scope module u_mdr $end
 $var wire 1 " clk $end
-$var wire 32 m mdrIn [31:0] $end
-$var reg 32 n mdrOut [31:0] $end
+$var wire 32 m regIn [31:0] $end
+$var wire 1 % rst $end
+$var reg 32 n regOut [31:0] $end
 $upscope $end
 $scope module u_pc $end
-$var wire 32 o addrIn [31:0] $end
 $var wire 1 " clk $end
 $var wire 1 * enable $end
+$var wire 32 o regIn [31:0] $end
 $var wire 1 % rst $end
-$var reg 32 p addrOut [31:0] $end
+$var reg 32 p regOut [31:0] $end
 $upscope $end
 $scope module u_rf $end
 $var wire 1 " clk $end
@@ -410,12 +415,50 @@ b1 g
 0#
 0"
 #20
+b10 h
 b0 T
+b0 =
+b0 G
+b0 P
+b0 o
+b0 !
+b0 2
+b0 :
+b0 D
+b0 O
+b0 &
+b0 t
+b0 ;"
+b0 Y
+b0 C
+b0 s
+b0 r
+b0 q
+b0 1
+b0 M
+b0 j
 b0 >
 b0 B
 b0 ;
 b0 F
 b0 J
+b0 8
+b0 @
+b0 Q
+b0 9"
+b0 4
+b0 N
+b0 U
+b0 X
+b0 5
+b0 H
+b0 S
+b0 .
+b0 n
+b0 :"
+b0 0
+b0 i
+b0 l
 b0 <
 b0 A
 b0 I
@@ -428,6 +471,12 @@ b10100000000010010010000011 -
 b10100000000010010010000011 V
 b10100000000010010010000011 k
 b10100000000010010010000011 m
+b0 (
+b0 W
+b0 v
+b0 )
+b0 R
+b0 u
 1"
 #50
 0"
@@ -472,7 +521,6 @@ b11 Y
 b11 C
 b1001 s
 b1000 r
-b0 q
 b101000 1
 b101000 M
 b101000 j
@@ -511,14 +559,14 @@ b101000 =
 b101000 G
 b101000 P
 b101000 o
+b0 ;
+b0 F
+b0 J
 b101100 !
 b101100 2
 b101100 &
 b101100 t
 b101100 ;"
-b0 ;
-b0 F
-b0 J
 17
 b10000 h
 b10 6
@@ -528,17 +576,18 @@ b101100 8
 b101100 @
 b101100 Q
 b101100 9"
-b0 5
-b0 H
-b0 S
+bx 4
+bx N
+bx U
+bx X
 b10110000000010010100000011 -
 b10110000000010010100000011 V
 b10110000000010010100000011 k
 b10110000000010010100000011 m
 b1000 g
-b0 )
-b0 R
-b0 u
+bx (
+bx W
+bx v
 1"
 #110
 0"
@@ -1923,6 +1972,13 @@ b0 =
 b0 G
 b0 P
 b0 o
+b0 !
+b0 2
+b0 &
+b0 t
+b0 ;"
+b0 Y
+b0 C
 b0 >
 b0 B
 b0 ;
@@ -1932,6 +1988,16 @@ b0 6
 b0 L
 b0 f
 b10 h
+b0 8
+b0 @
+b0 Q
+b0 9"
+b0 .
+b0 n
+b0 :"
+b0 0
+b0 i
+b0 l
 bx -
 bx V
 bx k
@@ -1947,22 +2013,10 @@ b1 g
 #1070
 0"
 #1080
-b0 !
-b0 2
-b0 &
-b0 t
-b0 ;"
 b10100000000010010010000011 -
 b10100000000010010010000011 V
 b10100000000010010010000011 k
 b10100000000010010010000011 m
-bx .
-bx n
-bx :"
-b0 8
-b0 @
-b0 Q
-b0 9"
 1"
 #1090
 0"
