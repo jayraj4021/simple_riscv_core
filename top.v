@@ -15,6 +15,49 @@ Output description =>
 `include "basicMemory.v"
 //`include "gowin_sp/gowin_sp.v"
 
+module mux2 (input [31:0] in0, in1, input select, output reg [31:0] out);
+    always @(*) begin
+        case(select)
+            1'b0: out = in0;
+            1'b1: out = in1;
+        endcase
+    end
+endmodule
+
+module mux3 (input [31:0] in0, in1, in2, input [1:0] select, output reg [31:0] out);
+    always @(*) begin
+        case(select)
+            2'b00: out = in0;
+            2'b01: out = in1;
+            2'b10: out = in2;
+            default: out = in1;
+        endcase
+    end
+endmodule
+
+module regWithEnable (input clk, input rst ,input enable, input [31:0] regIn, output reg [31:0] regOut);
+    always@(posedge clk) begin
+        if(rst == 1'b1) begin
+            regOut <= 32'h0000;
+        end
+        else begin
+            if(enable == 1'b1) begin
+                regOut <= regIn;
+            end
+        end
+    end
+endmodule
+
+module regWithoutEnable (input clk, input rst, input [31:0] regIn, output reg [31:0] regOut);
+    always@(posedge clk) begin
+        if(rst == 1'b1) begin
+            regOut <= 32'h0000;
+        end
+        else begin
+            regOut <= regIn;
+        end
+    end
+endmodule
 
 module top( input clk, nrst, output [5:0] fDataOut);
 
@@ -63,47 +106,5 @@ module top( input clk, nrst, output [5:0] fDataOut);
     assign fDataOut = aluOutNet[5:0];
 endmodule
 
-module mux2 (input [31:0] in0, in1, input select, output reg [31:0] out);
-    always @(*) begin
-        case(select)
-            1'b0: out = in0;
-            1'b1: out = in1;
-        endcase
-    end
-endmodule
 
-module mux3 (input [31:0] in0, in1, in2, input [1:0] select, output reg [31:0] out);
-    always @(*) begin
-        case(select)
-            2'b00: out = in0;
-            2'b01: out = in1;
-            2'b10: out = in2;
-            default: out = in1;
-        endcase
-    end
-endmodule
-
-module regWithEnable (input clk, input rst ,input enable, input [31:0] regIn, output reg [31:0] regOut);
-    always@(posedge clk) begin
-        if(rst == 1'b1) begin
-            regOut <= 32'h0000;
-        end
-        else begin
-            if(enable == 1'b1) begin
-                regOut <= regIn;
-            end
-        end
-    end
-endmodule
-
-module regWithoutEnable (input clk, input rst, input [31:0] regIn, output reg [31:0] regOut);
-    always@(posedge clk) begin
-        if(rst == 1'b1) begin
-            regOut <= 32'h0000;
-        end
-        else begin
-            regOut <= regIn;
-        end
-    end
-endmodule
 
