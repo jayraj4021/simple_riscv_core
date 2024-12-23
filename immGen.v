@@ -2,10 +2,9 @@
 Module => immGen
 Purpose => Immediate generation unit, it has to generate 32bit immediates from all types of instructions. 
 Input description =>
-    1. 
-    2. 
+    1. instr - 32 bit instruction
 Output description =>
-    1. 
+    1. imm - 32 bit immediate
 */
 module immGen( input [31:0] instr, output reg [31:0] imm);
 always@(*) begin

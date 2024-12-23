@@ -16,30 +16,30 @@ module rf(input clk, input regWriteEnable,
                      input [4:0] writeReg, input [31:0] writeData, 
                     output reg [31:0] readData1, output reg [31:0] readData2);
 
-// 32 registers each 32 bit wide
-reg [31:0] registersOfRegFile [31:0];
-// setting 0 register to always be 0
-initial begin
-    registersOfRegFile[0] <= 32'b0; 
-end
-
-
-// write logic
-genvar i;
-generate 
-    for (i=0; i<32; i=i+1) begin: reg_write
-        always@(posedge clk) begin
-            if (regWriteEnable == 1'b1 && (writeReg == i) && (writeReg != 5'b0)) begin
-                registersOfRegFile[i] <= writeData ;
-            end 
-        end
+    // 32 registers each 32 bit wide
+    reg [31:0] registersOfRegFile [31:0];
+    // setting 0 register to always be 0
+    initial begin
+        registersOfRegFile[0] <= 32'b0; 
     end
-endgenerate
 
 
-//read logic
-always @(posedge clk) begin
-    readData1 = registersOfRegFile[readReg1];
-    readData2 = registersOfRegFile[readReg2];
-end
+    // write logic
+    genvar i;
+    generate 
+        for (i=0; i<32; i=i+1) begin: reg_write
+            always@(posedge clk) begin
+                if (regWriteEnable == 1'b1 && (writeReg == i) && (writeReg != 5'b0)) begin
+                    registersOfRegFile[i] <= writeData ;
+                end 
+            end
+        end
+    endgenerate
+
+
+    //read logic
+    always @(posedge clk) begin
+        readData1 = registersOfRegFile[readReg1];
+        readData2 = registersOfRegFile[readReg2];
+    end
 endmodule

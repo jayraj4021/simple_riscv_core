@@ -1,11 +1,7 @@
 /* 
 Module => control
 Purpose => main controller of the design
-Input description =>
-    1. clk => central ticker of the system, on each positive edge of the clock things happen
-    2. 
-Output description =>
-    1. 
+        Generates various control signals needed in the design
 */
 
 

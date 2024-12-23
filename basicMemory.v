@@ -1,7 +1,5 @@
 /* creating basic memory to help simulation in vscode, as gowin IP won't work. */
 
-
-
 module basicMemory(input clk, input rst, input ce, input wre, input [7:0] ad, input [31:0] din, output reg [31:0] dout);
 
     reg [31:0] memStoreArray [255:0];
@@ -13,7 +11,6 @@ module basicMemory(input clk, input rst, input ce, input wre, input [7:0] ad, in
         memStoreArray[40] = 32'h00000006;
         memStoreArray[44] = 32'h00000005;
     end
-
 
     always@(posedge clk) begin
         if(wre) begin
