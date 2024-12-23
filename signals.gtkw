@@ -1,25 +1,27 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Dec 22 17:03:30 2024
+[*] Mon Dec 23 17:04:16 2024
 [*]
 [dumpfile] "D:\jayraj\RISC_V\simple_riscv_core\top_tb.vcd"
-[dumpfile_mtime] "Sun Dec 22 17:00:59 2024"
+[dumpfile_mtime] "Mon Dec 23 16:19:34 2024"
 [dumpfile_size] 33833
 [savefile] "D:\jayraj\RISC_V\simple_riscv_core\signals.gtkw"
 [timestart] 0
 [size] 2560 1369
-[pos] -4083 -1083
-*-6.000000 140 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -3849 -956
+*-6.000000 300 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top_tb.
 [treeopen] top_tb.u_top.
 [sst_width] 201
 [signals_width] 174
 [sst_expanded] 1
-[sst_vpaned_height] 891
-@28
+[sst_vpaned_height] 892
+@29
 top_tb.clk
+@28
 top_tb.nrst
 @22
+top_tb.u_top.u_control.currentState[10:0]
 top_tb.u_top.u_control.instOpcode[6:0]
 @28
 top_tb.u_top.u_control.IorDSelector
@@ -35,8 +37,20 @@ top_tb.u_top.u_control.aluSrcBSelect[1:0]
 top_tb.u_top.u_control.aluOp[1:0]
 @200
 -PC
-@23
+@22
 top_tb.u_top.u_pc.regOut[31:0]
+@200
+-IR
+@22
+top_tb.u_top.u_ir.regOut[31:0]
+@200
+-A
+@22
+top_tb.u_top.u_ar.regOut[31:0]
+@200
+-B
+@22
+top_tb.u_top.u_br.regOut[31:0]
 @200
 -memory
 @22

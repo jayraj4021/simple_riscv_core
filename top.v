@@ -106,5 +106,10 @@ module top( input clk, nrst, output [5:0] fDataOut);
     assign fDataOut = aluOutNet[5:0];
 endmodule
 
-
+/*
+Commands to generate waveform-
+iverilog -o top_tb.vvp top_tb.v
+vvp top_tb.vvp
+gtkwave top_tb.vcd signals.gtkw
+*/
 
