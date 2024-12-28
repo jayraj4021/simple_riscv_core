@@ -65,8 +65,8 @@ module top( input clk, nrst, output [5:0] fDataOut);
     // converting acrive low reset of tang nano to active high
     wire rst = !nrst;
 
-    wire [31:0] addrInPcNet, addrOutPcNet;
-    wire [31:0] aluOutNet;
+    wire [31:0] addrOutPcNet, pcSourceMuxOutNet;
+    wire [31:0] aluOutNet, aluRegOutNet;
     wire [31:0] memoryDataOutNet;
     wire [31:0] irOutNet;
     wire [31:0] mdrOutNet;
@@ -79,7 +79,7 @@ module top( input clk, nrst, output [5:0] fDataOut);
     wire [31:0] aluBmuxOutNet;
     wire [31:0] immGenOutNet;
     wire [31:0] IorDmuxOutNet;
-    wire IorDSelectorNet, ceNet, oceNet, wreNet, pcWriteEnableNet, pcWriteCondNet, memtoRegSelectNet, irWriteEnableNet, regWriteEnableNet, aluSrcASelectNet;
+    wire IorDSelectorNet, ceNet, oceNet, wreNet, pcWriteEnableNet, pcWriteCondNet, pcSourceNet, memtoRegSelectNet, irWriteEnableNet, regWriteEnableNet, aluSrcASelectNet;
     wire [1:0] aluSrcBSelectNet;
     wire [1:0] aluOpNet;
     wire aluIsZeroNet;
@@ -92,26 +92,27 @@ module top( input clk, nrst, output [5:0] fDataOut);
 
    
     // instantiating all the modules
-    regWithEnable u_pc(.clk(clk), .rst(rst), .enable(finalPcEnableNet), .regIn(addrInPcNet), .regOut(addrOutPcNet));
-    mux2 u_IorDmux(.in0(addrOutPcNet), .in1(aluOutNet), .select(IorDSelectorNet), .out(IorDmuxOutNet));
+    regWithEnable u_pc(.clk(clk), .rst(rst), .enable(finalPcEnableNet), .regIn(pcSourceMuxOutNet), .regOut(addrOutPcNet));
+    mux2 u_pcSourceMux(.in0(aluOutNet), .in1(aluRegOutNet), .select(pcSourceNet), .out(pcSourceMuxOutNet));
+    mux2 u_IorDmux(.in0(addrOutPcNet), .in1(aluRegOutNet), .select(IorDSelectorNet), .out(IorDmuxOutNet));
     //Gowin_SP u_spmem(.dout(memoryDataOutNet), .clk(clk), .oce(oceNet), .ce(ceNet), .reset(rst), .wre(wreNet), .ad(IorDmuxOutNet[7:0]), .din(brOutNet));
     basicMemory u_basicMemory(.clk(clk), .rst(rst), .ce(ceNet), .wre(wreNet), .ad(IorDmuxOutNet[7:0]), .din(brOutNet), .dout(memoryDataOutNet));
     regWithEnable u_ir(.clk(clk), .rst(rst), .enable(irWriteEnableNet), .regIn(memoryDataOutNet), .regOut(irOutNet));
     regWithoutEnable u_mdr(.clk(clk), .rst(rst), .regIn(memoryDataOutNet), .regOut(mdrOutNet));
-    mux2 u_rfWriteDataMux(.in0(aluOutNet), .in1(mdrOutNet), .select(memtoRegSelectNet), .out(rfWriteDataMuxOutNet));
+    mux2 u_rfWriteDataMux(.in0(aluRegOutNet), .in1(mdrOutNet), .select(memtoRegSelectNet), .out(rfWriteDataMuxOutNet));
     rf u_rf(.clk(clk), .regWriteEnable(regWriteEnableNet), .readReg1(irOutNet[19:15]), .readReg2(irOutNet[24:20]), .writeReg(irOutNet[11:7]), .readData1(readData1Net), .readData2(readData2Net),.writeData(rfWriteDataMuxOutNet));
     regWithoutEnable u_ar(.clk(clk), .rst(rst), .regIn(readData1Net), .regOut(arOutNet));
     mux2 u_aluAmux(.in0(addrOutPcNet), .in1(arOutNet), .select(aluSrcASelectNet), .out(aluAmuxOutNet));
     regWithoutEnable u_br(.clk(clk), .rst(rst), .regIn(readData2Net), .regOut(brOutNet));
     mux3 u_aluBmux(.in0(brOutNet),.in1(32'h00000004),.in2(immGenOutNet),.select(aluSrcBSelectNet),.out(aluBmuxOutNet));
     immGen u_immGen(.instr(irOutNet),.imm(immGenOutNet));
-    alu u_alu(.ALUop(aluOpNet), .instOpcode(irOutNet[6:0]), .A(aluAmuxOutNet), .B(aluBmuxOutNet), .Z(addrInPcNet), .isZero(aluIsZeroNet));
-    regWithoutEnable u_alur(.clk(clk),  .rst(rst), .regIn(addrInPcNet), .regOut(aluOutNet));
+    alu u_alu(.ALUop(aluOpNet), .instOpcode(irOutNet[6:0]), .A(aluAmuxOutNet), .B(aluBmuxOutNet), .Z(aluOutNet), .isZero(aluIsZeroNet));
+    regWithoutEnable u_alur(.clk(clk),  .rst(rst), .regIn(aluOutNet), .regOut(aluRegOutNet));
     control u_control(.clk(clk), .rst(rst), .instOpcode(irOutNet[6:0]), .IorDSelector(IorDSelectorNet), .ce(ceNet), .oce(oceNet), .wre(wreNet), .pcWriteEnable(pcWriteEnableNet),
-                .pcWriteCond(pcWriteCondNet), .memtoRegSelect(memtoRegSelectNet), .irWriteEnable(irWriteEnableNet), .regWriteEnable(regWriteEnableNet), .aluSrcASelect(aluSrcASelectNet),
-                .aluSrcBSelect(aluSrcBSelectNet), .aluOp(aluOpNet));
+                .pcWriteCond(pcWriteCondNet), .pcSource(pcSourceNet), .memtoRegSelect(memtoRegSelectNet), .irWriteEnable(irWriteEnableNet), .regWriteEnable(regWriteEnableNet),
+                .aluSrcASelect(aluSrcASelectNet), .aluSrcBSelect(aluSrcBSelectNet), .aluOp(aluOpNet));
 
-    assign fDataOut = aluOutNet[5:0];
+    assign fDataOut = aluRegOutNet[5:0];
 endmodule
 
 /*

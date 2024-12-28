@@ -6,7 +6,7 @@ Purpose => main controller of the design
 
 
 module control(  input clk, input rst, input [6:0] instOpcode, 
-                output reg IorDSelector, output reg ce, output reg oce, output reg wre, output reg pcWriteEnable, output reg pcWriteCond, output reg memtoRegSelect, output reg irWriteEnable, 
+                output reg IorDSelector, output reg ce, output reg oce, output reg wre, output reg pcWriteEnable, output reg pcWriteCond, output reg pcSource, output reg memtoRegSelect, output reg irWriteEnable, 
                         output reg regWriteEnable, output reg aluSrcASelect, output reg [1:0] aluSrcBSelect, output reg [1:0] aluOp );
     
     // 10 States - one hot encoding
@@ -48,6 +48,7 @@ module control(  input clk, input rst, input [6:0] instOpcode,
         wre = 1'b0; // write enable input, 1: write, 0: read
         pcWriteEnable = 1'b0;
         pcWriteCond = 1'b0;
+        pcSource = 1'b0;
         memtoRegSelect = 1'b0;
         irWriteEnable = 1'b0;
         regWriteEnable = 1'b0;
@@ -71,6 +72,7 @@ module control(  input clk, input rst, input [6:0] instOpcode,
                 wre = 1'b0;
                 pcWriteEnable = 1'b1;
                 pcWriteCond = 1'b0;
+                pcSource = 1'b0;
                 memtoRegSelect = 1'b0;
                 irWriteEnable = 1'b1;
                 regWriteEnable = 1'b0;
@@ -165,6 +167,7 @@ module control(  input clk, input rst, input [6:0] instOpcode,
                 // aluOp = 2'b01 indicated that the operation will be subtraction
                 aluOp = 2'b01;
                 pcWriteCond = 1'b1;
+                pcSource = 1'b1;
             end
             default: begin
                 nextState = idle;
@@ -173,6 +176,8 @@ module control(  input clk, input rst, input [6:0] instOpcode,
                 oce = 1'b0; 
                 wre = 1'b0; 
                 pcWriteEnable = 1'b0;
+                pcWriteCond = 1'b0;
+                pcSource = 1'b0;
                 memtoRegSelect = 1'b0;
                 irWriteEnable = 1'b0;
                 regWriteEnable = 1'b0;
