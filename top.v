@@ -79,13 +79,20 @@ module top( input clk, nrst, output [5:0] fDataOut);
     wire [31:0] aluBmuxOutNet;
     wire [31:0] immGenOutNet;
     wire [31:0] IorDmuxOutNet;
-    wire IorDSelectorNet, ceNet, oceNet, wreNet, pcWriteEnableNet, memtoRegSelectNet, irWriteEnableNet, regWriteEnableNet, aluSrcASelectNet;
+    wire IorDSelectorNet, ceNet, oceNet, wreNet, pcWriteEnableNet, pcWriteCondNet, memtoRegSelectNet, irWriteEnableNet, regWriteEnableNet, aluSrcASelectNet;
     wire [1:0] aluSrcBSelectNet;
     wire [1:0] aluOpNet;
+    wire aluIsZeroNet;
+    reg isZeroAndPcWriteCond, finalPcEnableNet;
+
+    always @(*) begin
+        isZeroAndPcWriteCond <= pcWriteCondNet && aluIsZeroNet ;
+        finalPcEnableNet <= isZeroAndPcWriteCond || pcWriteEnableNet ;
+    end
 
    
     // instantiating all the modules
-    regWithEnable u_pc(.clk(clk), .rst(rst), .enable(pcWriteEnableNet), .regIn(addrInPcNet), .regOut(addrOutPcNet));
+    regWithEnable u_pc(.clk(clk), .rst(rst), .enable(finalPcEnableNet), .regIn(addrInPcNet), .regOut(addrOutPcNet));
     mux2 u_IorDmux(.in0(addrOutPcNet), .in1(aluOutNet), .select(IorDSelectorNet), .out(IorDmuxOutNet));
     //Gowin_SP u_spmem(.dout(memoryDataOutNet), .clk(clk), .oce(oceNet), .ce(ceNet), .reset(rst), .wre(wreNet), .ad(IorDmuxOutNet[7:0]), .din(brOutNet));
     basicMemory u_basicMemory(.clk(clk), .rst(rst), .ce(ceNet), .wre(wreNet), .ad(IorDmuxOutNet[7:0]), .din(brOutNet), .dout(memoryDataOutNet));
@@ -98,10 +105,11 @@ module top( input clk, nrst, output [5:0] fDataOut);
     regWithoutEnable u_br(.clk(clk), .rst(rst), .regIn(readData2Net), .regOut(brOutNet));
     mux3 u_aluBmux(.in0(brOutNet),.in1(32'h00000004),.in2(immGenOutNet),.select(aluSrcBSelectNet),.out(aluBmuxOutNet));
     immGen u_immGen(.instr(irOutNet),.imm(immGenOutNet));
-    alu u_alu(.ALUop(aluOpNet), .instOpcode(irOutNet[6:0]), .A(aluAmuxOutNet), .B(aluBmuxOutNet), .Z(addrInPcNet));
+    alu u_alu(.ALUop(aluOpNet), .instOpcode(irOutNet[6:0]), .A(aluAmuxOutNet), .B(aluBmuxOutNet), .Z(addrInPcNet), .isZero(aluIsZeroNet));
     regWithoutEnable u_alur(.clk(clk),  .rst(rst), .regIn(addrInPcNet), .regOut(aluOutNet));
-    control u_control(.clk(clk), .rst(rst), .instOpcode(irOutNet[6:0]), .IorDSelector(IorDSelectorNet), .ce(ceNet), .oce(oceNet), .wre(wreNet), .pcWriteEnable(pcWriteEnableNet), .memtoRegSelect(memtoRegSelectNet),
-                .irWriteEnable(irWriteEnableNet), .regWriteEnable(regWriteEnableNet), .aluSrcASelect(aluSrcASelectNet), .aluSrcBSelect(aluSrcBSelectNet), .aluOp(aluOpNet));
+    control u_control(.clk(clk), .rst(rst), .instOpcode(irOutNet[6:0]), .IorDSelector(IorDSelectorNet), .ce(ceNet), .oce(oceNet), .wre(wreNet), .pcWriteEnable(pcWriteEnableNet),
+                .pcWriteCond(pcWriteCondNet), .memtoRegSelect(memtoRegSelectNet), .irWriteEnable(irWriteEnableNet), .regWriteEnable(regWriteEnableNet), .aluSrcASelect(aluSrcASelectNet),
+                .aluSrcBSelect(aluSrcBSelectNet), .aluOp(aluOpNet));
 
     assign fDataOut = aluOutNet[5:0];
 endmodule

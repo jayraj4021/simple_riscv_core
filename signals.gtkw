@@ -1,25 +1,25 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Dec 23 17:04:16 2024
+[*] Sat Dec 28 14:35:29 2024
 [*]
 [dumpfile] "D:\jayraj\RISC_V\simple_riscv_core\top_tb.vcd"
-[dumpfile_mtime] "Mon Dec 23 16:19:34 2024"
-[dumpfile_size] 33833
+[dumpfile_mtime] "Sat Dec 28 14:33:35 2024"
+[dumpfile_size] 39232
 [savefile] "D:\jayraj\RISC_V\simple_riscv_core\signals.gtkw"
 [timestart] 0
 [size] 2560 1369
 [pos] -3849 -956
-*-6.000000 300 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-6.000000 122 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top_tb.
 [treeopen] top_tb.u_top.
-[sst_width] 201
+[sst_width] 242
 [signals_width] 174
 [sst_expanded] 1
-[sst_vpaned_height] 892
-@29
-top_tb.clk
+[sst_vpaned_height] 616
 @28
+top_tb.clk
 top_tb.nrst
+top_tb.u_top.finalPcEnableNet
 @22
 top_tb.u_top.u_control.currentState[10:0]
 top_tb.u_top.u_control.instOpcode[6:0]
@@ -60,6 +60,18 @@ top_tb.u_top.u_basicMemory.dout[31:0]
 -immediate
 @22
 top_tb.u_top.u_immGen.imm[31:0]
+@200
+-ALU
+@22
+top_tb.u_top.u_alu.A[31:0]
+top_tb.u_top.u_alu.B[31:0]
+top_tb.u_top.u_alu.Z[31:0]
+@28
+top_tb.u_top.u_alu.isZero
+@201
+-ALUreg
+@22
+top_tb.u_top.u_alur.regOut[31:0]
 @200
 -RF
 @22

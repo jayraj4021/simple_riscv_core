@@ -6,7 +6,7 @@ Purpose => main controller of the design
 
 
 module control(  input clk, input rst, input [6:0] instOpcode, 
-                output reg IorDSelector, output reg ce, output reg oce, output reg wre, output reg pcWriteEnable, output reg memtoRegSelect, output reg irWriteEnable, 
+                output reg IorDSelector, output reg ce, output reg oce, output reg wre, output reg pcWriteEnable, output reg pcWriteCond, output reg memtoRegSelect, output reg irWriteEnable, 
                         output reg regWriteEnable, output reg aluSrcASelect, output reg [1:0] aluSrcBSelect, output reg [1:0] aluOp );
     
     // 10 States - one hot encoding
@@ -47,6 +47,7 @@ module control(  input clk, input rst, input [6:0] instOpcode,
         oce = 1'b0; // output clock enable for memory, signal used in pipeline, invalid in Bypass
         wre = 1'b0; // write enable input, 1: write, 0: read
         pcWriteEnable = 1'b0;
+        pcWriteCond = 1'b0;
         memtoRegSelect = 1'b0;
         irWriteEnable = 1'b0;
         regWriteEnable = 1'b0;
@@ -69,6 +70,7 @@ module control(  input clk, input rst, input [6:0] instOpcode,
                 oce = 1'b1;
                 wre = 1'b0;
                 pcWriteEnable = 1'b1;
+                pcWriteCond = 1'b0;
                 memtoRegSelect = 1'b0;
                 irWriteEnable = 1'b1;
                 regWriteEnable = 1'b0;
@@ -80,7 +82,11 @@ module control(  input clk, input rst, input [6:0] instOpcode,
             instDecodeRegFetch: begin
                 if(instOpcode == 7'h03) begin
                     nextState = memoryAddrCompute;
-                end else begin
+                end 
+                else if (instOpcode == 7'h63) begin
+                    nextState = branchComplete;
+                end 
+                else begin
                     nextState = rTypeExecute;
                 end
                 ce = 1'b0;
@@ -142,7 +148,7 @@ module control(  input clk, input rst, input [6:0] instOpcode,
                 nextState = rTypeComplete;
                 aluSrcASelect = 1'b1;
                 aluSrcBSelect = 2'b00;
-                // aluOp= 2'10 indicates that the operation will be decided by opcode of instruction
+                // aluOp = 2'10 indicates that the operation will be decided by opcode of instruction
                 aluOp = 2'b10;
             end
             // rTypeComplete state hex is 200
@@ -154,7 +160,11 @@ module control(  input clk, input rst, input [6:0] instOpcode,
             // branchComplete state hex is 400
             branchComplete: begin
                 nextState = instFetch;
-
+                aluSrcASelect = 1'b1;
+                aluSrcBSelect = 2'b00;
+                // aluOp = 2'b01 indicated that the operation will be subtraction
+                aluOp = 2'b01;
+                pcWriteCond = 1'b1;
             end
             default: begin
                 nextState = idle;

@@ -8,13 +8,18 @@ Input description =>
     4. B - 32 bit operand
 Output description =>
     1. Z - ALU output
+    2. isZero - 1 bit flag which indicates if z is equal to 0
 */
-module alu(input [1:0] ALUop, input [6:0] instOpcode, input [31:0] A , input [31:0] B, output reg [31:0] Z);
+module alu(input [1:0] ALUop, input [6:0] instOpcode, input [31:0] A , input [31:0] B, output reg [31:0] Z, output reg isZero);
 
 always@(*) begin
     case(ALUop)
-        2'b00: Z = A + B ;
-        2'b01: Z = A - B ;
+        2'b00: begin 
+            Z = A + B ;
+        end
+        2'b01: begin
+            Z = A - B ;
+        end
         // following two are fake, need to update
         2'b10: begin
             if (instOpcode == 7'h33) begin
@@ -28,4 +33,13 @@ always@(*) begin
         2'b11: Z = A + B ;
     endcase
 end
+
+always @(*) begin
+    if (Z == 32'b0) begin
+        isZero <= 1'b1;
+    end else begin
+        isZero <= 1'b0;
+    end
+end
+
 endmodule

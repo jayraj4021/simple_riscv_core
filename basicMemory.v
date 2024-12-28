@@ -8,6 +8,7 @@ module basicMemory(input clk, input rst, input ce, input wre, input [7:0] ad, in
         memStoreArray[0] = 32'h02802483;  // lw x9, 40(x0)
         memStoreArray[4] = 32'h02C02503;  // lw x10, 44(x0)
         memStoreArray[8] = 32'h00A485B3;  // add x11, x9, x10
+        memStoreArray[12] = 32'hFE000EE3; // beq x0, x0, -4
         memStoreArray[40] = 32'h00000006;
         memStoreArray[44] = 32'h00000005;
     end
