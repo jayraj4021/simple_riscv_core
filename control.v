@@ -9,22 +9,23 @@ module control(  input clk, input rst, input [6:0] instOpcode,
                 output reg IorDSelector, output reg ce, output reg oce, output reg wre, output reg pcWriteEnable, output reg pcWriteCond, output reg pcSource, output reg memtoRegSelect, output reg irWriteEnable, 
                         output reg regWriteEnable, output reg aluSrcASelect, output reg [1:0] aluSrcBSelect, output reg [1:0] aluOp );
     
-    // 10 States - one hot encoding
-    reg [10:0] currentState;
-    reg [10:0] nextState;
+    // 12 States - one hot encoding
+    reg [11:0] currentState;
+    reg [11:0] nextState;
     // state definition
     localparam
-        idle =                  11'b00000000001,
-        instFetch =             11'b00000000010,
-        instDecodeRegFetch =    11'b00000000100,
-        memoryAddrCompute =     11'b00000001000,
-        memoryReadAccess =      11'b00000010000,
-        memoryReadComplete =    11'b00000100000,
-        mdrToRegFile =          11'b00001000000,
-        memoryWriteAccess =     11'b00010000000,
-        rTypeExecute =          11'b00100000000,
-        rTypeComplete =         11'b01000000000,
-        branchComplete =        11'b10000000000;
+        idle =                  12'b000000000001,
+        instFetch =             12'b000000000010,
+        instDecodeRegFetch =    12'b000000000100,
+        memoryAddrCompute =     12'b000000001000,
+        memoryReadAccess =      12'b000000010000,
+        memoryReadComplete =    12'b000000100000,
+        mdrToRegFile =          12'b000001000000,
+        memoryWriteAccess =     12'b000010000000,
+        rTypeExecute =          12'b000100000000,
+        rTypeComplete =         12'b001000000000,
+        branchComplete =        12'b010000000000,
+        branchMemDataGen =      12'b100000000000; // state added for data to propogate from memory to IR input so that instFetch captures correct data after branch
     
     // Sequential logic for state transition
     // asynchronous rst
@@ -161,13 +162,17 @@ module control(  input clk, input rst, input [6:0] instOpcode,
             end
             // branchComplete state hex is 400
             branchComplete: begin
-                nextState = instFetch;
+                nextState = branchMemDataGen;
                 aluSrcASelect = 1'b1;
                 aluSrcBSelect = 2'b00;
                 // aluOp = 2'b01 indicated that the operation will be subtraction
                 aluOp = 2'b01;
                 pcWriteCond = 1'b1;
                 pcSource = 1'b1;
+            end
+            // branchMemDataGen state hex is 800
+            branchMemDataGen: begin
+                nextState = instFetch;
             end
             default: begin
                 nextState = idle;
