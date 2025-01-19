@@ -13,5 +13,6 @@ Following are details of other files included in top.v.
 4. <strong>control.v</strong> 👮‍♂️- defines the controller unit.
 5. <strong>basicMemory.v</strong> - defines a basic memory array.
 
-I wrote this code as I read through <strong>'Computer Organization and Design' by Patterson and Hennessy</strong>.
+I wrote this code as I read through <strong>'Computer Organization and Design' by Patterson and Hennessy</strong>. Following image taken from the book shows the datapath of the implementation.
+
 
