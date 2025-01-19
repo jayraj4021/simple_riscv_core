@@ -14,5 +14,5 @@ Following are details of other files included in top.v.
 5. <strong>basicMemory.v</strong> - defines a basic memory array.
 
 I wrote this code as I read through <strong>'Computer Organization and Design' by Patterson and Hennessy</strong>. Following image taken from the book shows the datapath of the implementation.
-
+![Alt text](images/datapath_for_multiCycle_implementation.png "Image title")
 
