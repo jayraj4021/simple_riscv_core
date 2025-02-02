@@ -19,3 +19,5 @@ I wrote this code as I read through <strong>'Computer Organization and Design' b
 control.v contains code for the state machine implemented to control the design, following image shows the state machine. Again, the image is taken from the book but I have added few states to make my code work. You won't find the exact signal name as seen in the image but you will find signals with similar names.
 ![Alt text](images/StateMachine.png "State machine diagram")
 
+Following snippet is from basicMemory.v, i.e. the verilog containing a basic memory and its initialization. The snippet shows the code that we are attempting to run.
+
