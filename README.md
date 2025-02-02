@@ -11,7 +11,7 @@ Following are details of other files included in top.v.
 2. <strong>rf.v</strong> 📁- defines register file, it contains all the 32-bit registers of the processor.
 3. <strong>immGen.v</strong> - defines immediate generation unit.
 4. <strong>control.v</strong> 👮‍♂️- defines the controller unit.
-5. <strong>basicMemory.v</strong> - defines a basic memory array.
+5. <strong>basicMemory.v</strong> 💾- defines a basic memory array.
 
 I wrote this code as I read through <strong>'Computer Organization and Design' by Patterson and Hennessy</strong>. Following image taken from the book shows the datapath of the implementation.
 ![Alt text](images/datapath_for_multiCycle_implementation.png "Data path for multi cycle implementation of the design")
