@@ -22,5 +22,5 @@ control.v contains code for the state machine implemented to control the design,
 Following snippet is from basicMemory.v, i.e. the verilog containing a basic memory and its initialization. The snippet shows the code that we are attempting to run.
 ![Alt text](images/memoryContent.png "Memory content")
 
-Following waveform image shows lot of signals from the design. Signals panel contains name of the signals along with red colored comments to indicate which logical module does the signal belongs to. Yellow box highlights the instructions being fetched. Two orange arrows shows the numbers loaded in register file by previous lw instructions being used in add instruction and yellow arrow at the bottom shows the result of add instruction.
+Following waveform image shows lot of signals from the design. Signals panel contain name of the signals along with red colored comments to indicate the logical module that signal belongs to. Yellow box highlights the instructions being fetched. Two orange arrows shows the numbers loaded in register file by previous lw instructions being used in add instruction. The yellow arrow at the bottom shows result of the add instruction.
 ![Alt text](images/gtkwaveWaveform.png "Waveforms")
