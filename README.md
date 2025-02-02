@@ -16,6 +16,6 @@ Following are details of other files included in top.v.
 I wrote this code as I read through <strong>'Computer Organization and Design' by Patterson and Hennessy</strong>. Following image taken from the book shows the datapath of the implementation.
 ![Alt text](images/datapath_for_multiCycle_implementation.png "Data path for multi cycle implementation of the design")
 
-control.v contains code for the state machine implemented to control the design, Following image shows the state machine.
+control.v contains code for the state machine implemented to control the design, Following image shows the state machine. Again the image is taken from the book but I have added few states to make my code work.
 ![Alt text](images/StateMachine.png "State machine diagram")
 
