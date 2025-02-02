@@ -17,6 +17,5 @@ I wrote this code as I read through <strong>'Computer Organization and Design' b
 ![Alt text](images/datapath_for_multiCycle_implementation.png "Data path for multi cycle implementation of the design")
 
 control.v contains code for the state machine implemented to control the design, Following image shows the state machine.
-
-<--------------------image of the state machine------------------>
+![Alt text](images/StateMachine.png "State machine diagram")
 
