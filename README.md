@@ -20,4 +20,5 @@ control.v contains code for the state machine implemented to control the design,
 ![Alt text](images/StateMachine.png "State machine diagram")
 
 Following snippet is from basicMemory.v, i.e. the verilog containing a basic memory and its initialization. The snippet shows the code that we are attempting to run.
+![Alt text](images/memoryContent.png "Memory content")
 
